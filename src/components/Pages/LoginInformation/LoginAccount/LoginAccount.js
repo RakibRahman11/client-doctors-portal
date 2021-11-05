@@ -2,28 +2,29 @@ import { Alert, Button, Container, Grid, TextField, Typography } from '@mui/mate
 import React, { useState } from 'react';
 import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import loginImg from '../../../../../src/images/login.png'
-import useFirebase from '../../../../hooks/useFirebase';
-import initFirebase from './Firebase/firebase.init';
+import useAuth from '../../../../hooks/useAuth';
 
-initFirebase()
+
 
 const LoginAccount = () => {
+    const { user, authError, loginUser, googleSignIn } = useAuth()
     const [loginData, setLoginData] = useState({})
     const location = useLocation()
     const history = useHistory()
-    const { user, authError, loginUser } = useFirebase()
     const loginInfo = (e) => {
         const field = e.target.name;
         const value = e.target.value;
         const updateLoginData = { ...loginData }
         updateLoginData[field] = value
         setLoginData(updateLoginData)
-        console.log(loginData);
     }
     const handleLogin = e => {
         loginUser(loginData.email, loginData.password, location, history)
         alert('Update Information')
         e.preventDefault()
+    }
+    const handleGoogleSignIn = () => {
+        googleSignIn(location, history)
     }
     return (
         <Container sx={{ mt: 5 }}>
@@ -55,6 +56,9 @@ const LoginAccount = () => {
                             New user? Please register an account
                         </Typography></NavLink>
                     </form>
+                    <p>---------------------</p>
+                    <Button onClick={handleGoogleSignIn} variant="contained" sx={{ mt: 3 }}>Google Sign-in</Button>
+
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <img style={{ width: '80%' }} src={loginImg} alt='' />

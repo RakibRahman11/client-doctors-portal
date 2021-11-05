@@ -31,7 +31,7 @@ const Navigation = () => {
                     {
                         user?.email ?
                             <div>
-                                {user.email}
+                                {user.displayName}
                                 <Button onClick={logOut} color="inherit">Logout</Button>
                             </div>
                             :

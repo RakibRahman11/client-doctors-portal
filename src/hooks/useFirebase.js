@@ -1,4 +1,4 @@
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged, signOut, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile  } from "firebase/auth";
 import { useEffect, useState } from "react";
 import initFirebase from "../components/Pages/LoginInformation/LoginAccount/Firebase/firebase.init";
 
@@ -9,13 +9,24 @@ const useFirebase = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [authError, setAuthError] = useState('')
 
+    const googleProvider = new GoogleAuthProvider();
+
     const auth = getAuth();
 
-    const createUser = (email, password) => {
+    const createUser = (email, password, name, history, location) => {
         setIsLoading(true)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setAuthError('')
+                const newUser = { email, displayName:name}
+                setUser(newUser)
+                const destination = location?.state?.from || '/'
+                updateProfile(auth.currentUser, {
+                    displayName: name
+                })
+                .then(() => {})
+                .catch((error) => {});
+                history.replace(destination)
             })
             .catch((error) => {
                 setAuthError(error.message)
@@ -36,6 +47,19 @@ const useFirebase = () => {
             })
             .finally(() => setIsLoading(false));
     }
+
+    const googleSignIn = (location, history) => {
+        signInWithPopup(auth, googleProvider)
+            .then((result) => {
+                setUser(result.user)
+                setAuthError('')
+            })
+            .catch((error) => {
+                setAuthError(error.message)
+            })
+            .finally(() => setIsLoading(false));
+    }
+
     const logOut = () => {
         setIsLoading(true)
         signOut(auth).then(() => {
@@ -65,6 +89,7 @@ const useFirebase = () => {
         logOut,
         authError,
         loginUser,
+        googleSignIn,
         isLoading
     }
 }
