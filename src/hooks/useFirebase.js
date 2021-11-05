@@ -6,13 +6,13 @@ initFirebase()
 
 const useFirebase = () => {
     const [user, setUser] = useState({})
-    // const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(true)
     const [authError, setAuthError] = useState('')
 
     const auth = getAuth();
 
     const createUser = (email, password) => {
-        // isLoading(true)
+        setIsLoading(true)
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setAuthError('')
@@ -20,10 +20,11 @@ const useFirebase = () => {
             .catch((error) => {
                 setAuthError(error.message)
             })
-        // .finally(()=>setIsLoading(false));
+            .finally(() => setIsLoading(false));
     }
 
     const loginUser = (email, password, location, history) => {
+        setIsLoading(true)
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const destination = location?.state?.from || '/'
@@ -32,28 +33,29 @@ const useFirebase = () => {
             })
             .catch((error) => {
                 setAuthError(error.message)
-            });
+            })
+            .finally(() => setIsLoading(false));
     }
     const logOut = () => {
-        // isLoading(true)
+        setIsLoading(true)
         signOut(auth).then(() => {
 
         }).catch((error) => {
             setAuthError(error.message)
         })
-        // .finally(()=>setIsLoading(false));
+            .finally(() => setIsLoading(false));
 
     }
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            // isLoading(true)
+            setIsLoading(true)
             if (user) {
                 const uid = user.uid;
                 setUser(user)
             } else {
                 setUser({})
             }
-            // setIsLoading(false)
+            setIsLoading(false)
         });
         return () => unsubscribe;
     }, [])
@@ -63,7 +65,7 @@ const useFirebase = () => {
         logOut,
         authError,
         loginUser,
-        // isLoading
+        isLoading
     }
 }
 

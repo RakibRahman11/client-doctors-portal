@@ -3,13 +3,9 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import loginImg from '../../../../../src/images/login.png'
 import useAuth from '../../../../hooks/useAuth';
-import useFirebase from '../../../../hooks/useFirebase';
-import initFirebase from '../LoginAccount/Firebase/firebase.init';
-
-initFirebase()
 
 const RegisterAccount = () => {
-    const { createUser, isLoading, authError, user } = useFirebase()
+    const { createUser, isLoading, authError, user } = useAuth()
     const [loginData, setLoginData] = useState({})
     const loginInfo = (e) => {
         const field = e.target.name;
@@ -34,7 +30,7 @@ const RegisterAccount = () => {
                     <Typography variant="body1" gutterBottom>
                         Login
                     </Typography>
-                    {/* { !isLoading &&  */}
+                    { !isLoading && 
                     <form onSubmit={handleLogin}>
                         <TextField
                             id="standard-basic"
@@ -76,8 +72,8 @@ const RegisterAccount = () => {
                         <NavLink style={{ textDecoration: 'none' }} to='/login'><Typography style={{ marginTop: '10px' }} variant="button" display="block" gutterBottom>
                             Already an account? Please login
                         </Typography></NavLink>
-                    </form>
-                    {/* {isLoading && <CircularProgress />} */}
+                    </form>}
+                    {isLoading && <CircularProgress />}
                     {user?.email && <Alert severity="success">Successfully created</Alert>}
                     {authError && <Alert severity="error">{authError}</Alert>}
                 </Grid>
