@@ -10,6 +10,7 @@ import AppointPage from './components/Appointment/AppointPage/AppointPage';
 import LoginAccount from './components/Pages/LoginInformation/LoginAccount/LoginAccount';
 import RegisterAccount from './components/Pages/LoginInformation/RegisterAccount/RegisterAccount';
 import AuthProvider from './AuthProvider/AuthProvider';
+import PrivateRoute from './components/Pages/LoginInformation/PrivateRoute/PrivateRoute';
 
 function App() {
   return (
@@ -23,9 +24,9 @@ function App() {
             <Route exact path="/home">
               <Home></Home>
             </Route>
-            <Route exact path="/appointment">
+            <PrivateRoute exact path="/appointment">
               <AppointPage></AppointPage>
-            </Route>
+            </PrivateRoute>
             <Route exact path="/login">
               <LoginAccount></LoginAccount>
             </Route>

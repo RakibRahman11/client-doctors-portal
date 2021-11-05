@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Container, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Button, CircularProgress, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import loginImg from '../../../../../src/images/login.png'
@@ -9,7 +9,7 @@ import initFirebase from '../LoginAccount/Firebase/firebase.init';
 initFirebase()
 
 const RegisterAccount = () => {
-    const { createUser, isLoading } = useFirebase()
+    const { createUser, isLoading, authError, user } = useFirebase()
     const [loginData, setLoginData] = useState({})
     const loginInfo = (e) => {
         const field = e.target.name;
@@ -34,10 +34,12 @@ const RegisterAccount = () => {
                     <Typography variant="body1" gutterBottom>
                         Login
                     </Typography>
-                    { !isLoading && <form onSubmit={handleLogin}>
+                    {/* { !isLoading &&  */}
+                    <form onSubmit={handleLogin}>
                         <TextField
                             id="standard-basic"
                             sx={{ width: '75%', mt: 2 }}
+                            type='name'
                             name='name'
                             onChange={loginInfo}
                             label="Your name"
@@ -74,8 +76,10 @@ const RegisterAccount = () => {
                         <NavLink style={{ textDecoration: 'none' }} to='/login'><Typography style={{ marginTop: '10px' }} variant="button" display="block" gutterBottom>
                             Already an account? Please login
                         </Typography></NavLink>
-                    </form>}
-                    {isLoading && <CircularProgress />}
+                    </form>
+                    {/* {isLoading && <CircularProgress />} */}
+                    {user?.email && <Alert severity="success">Successfully created</Alert>}
+                    {authError && <Alert severity="error">{authError}</Alert>}
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <img style={{ width: '80%' }} src={loginImg} alt='' />

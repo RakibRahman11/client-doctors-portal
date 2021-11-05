@@ -1,10 +1,17 @@
-import { Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation, useHistory } from 'react-router-dom';
 import loginImg from '../../../../../src/images/login.png'
+import useFirebase from '../../../../hooks/useFirebase';
+import initFirebase from './Firebase/firebase.init';
+
+initFirebase()
 
 const LoginAccount = () => {
     const [loginData, setLoginData] = useState({})
+    const location = useLocation()
+    const history = useHistory()
+    const { user, authError, loginUser } = useFirebase()
     const loginInfo = (e) => {
         const field = e.target.name;
         const value = e.target.value;
@@ -14,6 +21,7 @@ const LoginAccount = () => {
         console.log(loginData);
     }
     const handleLogin = e => {
+        loginUser(loginData.email, loginData.password, location, history)
         alert('Update Information')
         e.preventDefault()
     }
@@ -43,7 +51,7 @@ const LoginAccount = () => {
                             variant="standard"
                         /><br />
                         <Button variant="contained" type="submit" sx={{ mt: 3 }}>Login</Button>
-                        <NavLink style={{textDecoration:'none', marginTop:'40px'}} to='/register'><Typography style={{ marginTop:'10px'}} variant="button" display="block" gutterBottom>
+                        <NavLink style={{ textDecoration: 'none', marginTop: '40px' }} to='/register'><Typography style={{ marginTop: '10px' }} variant="button" display="block" gutterBottom>
                             New user? Please register an account
                         </Typography></NavLink>
                     </form>
@@ -51,6 +59,8 @@ const LoginAccount = () => {
                 <Grid item xs={12} md={6}>
                     <img style={{ width: '80%' }} src={loginImg} alt='' />
                 </Grid>
+                {user?.email && <Alert severity="success">Successfully logged in</Alert>}
+                {authError && <Alert severity="error">{authError}</Alert>}
             </Grid>
         </Container>
     );
