@@ -11,6 +11,7 @@ import LoginAccount from './components/Pages/LoginInformation/LoginAccount/Login
 import RegisterAccount from './components/Pages/LoginInformation/RegisterAccount/RegisterAccount';
 import AuthProvider from './AuthProvider/AuthProvider';
 import PrivateRoute from './components/Pages/LoginInformation/PrivateRoute/PrivateRoute';
+import Dashboard from './components/Pages/BookingInformation/Dashboard/Dashboard';
 
 function App() {
   return (
@@ -26,6 +27,9 @@ function App() {
             </Route>
             <PrivateRoute exact path="/appointment">
               <AppointPage></AppointPage>
+            </PrivateRoute>
+            <PrivateRoute exact path="/dashboard">
+              <Dashboard></Dashboard>
             </PrivateRoute>
             <Route exact path="/login">
               <LoginAccount></LoginAccount>

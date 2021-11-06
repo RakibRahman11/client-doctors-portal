@@ -5,7 +5,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 
 const DatePick = ({date, setDate}) => {
-    
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <StaticDatePicker
