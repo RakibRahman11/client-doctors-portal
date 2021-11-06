@@ -21,7 +21,7 @@ const style = {
 const BookingModal = ({ open, handleClose, booking, date, setBookingSuccess }) => {
     const { user } = useAuth()
     const { title, time } = booking
-    const initialInfo = {patientName:user.displayName, email:user.email, phone:''}
+    const initialInfo = { patientName: user.displayName, email: user.email, phone: '' }
     const [bookingInfo, setBookingInfo] = useState(initialInfo)
     const handleOnChange = (e) => {
         const field = e.target.name;
@@ -34,20 +34,20 @@ const BookingModal = ({ open, handleClose, booking, date, setBookingSuccess }) =
     const handleBookingInfo = e => {
         const appointment = {
             ...bookingInfo,
-            serviceName:title,
+            serviceName: title,
             time,
-            date:date.toLocaleDateString()
+            date: date.toLocaleDateString()
         }
-        fetch('http://localhost:5000/appointments',{
+        fetch('http://localhost:5000/appointments', {
             method: 'POST',
-            headers:{
-                'content-type' : 'application/json'
+            headers: {
+                'content-type': 'application/json'
             },
-            body: JSON.stringify(appointment)    
+            body: JSON.stringify(appointment)
         })
             .then(response => response.json())
             .then(data => {
-                if(data.insertedId){
+                if (data.insertedId) {
                     setBookingSuccess(true)
                     handleClose()
                 }
@@ -74,7 +74,7 @@ const BookingModal = ({ open, handleClose, booking, date, setBookingSuccess }) =
 
                     <TextField onBlur={handleOnChange} style={{ width: '80%', marginBottom: '10px' }} id="standard-basic" defaultValue={user?.email} label="Your Email" name='email' variant="standard" />
 
-                    <TextField onBlur={handleOnChange} style={{ width: '80%', marginBottom: '35px'}} id="standard-basic" label="Contact Number" name='phone' variant="standard" />
+                    <TextField onBlur={handleOnChange} style={{ width: '80%', marginBottom: '35px' }} id="standard-basic" label="Contact Number" name='phone' variant="standard" />
 
                     <Button onClick={handleBookingInfo} variant="contained">Book the appointment</Button>
                 </form>

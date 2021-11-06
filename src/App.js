@@ -24,11 +24,11 @@ function App() {
             </Route>
             <Route exact path="/home">
               <Home></Home>
-            </Route>
-            <PrivateRoute exact path="/appointment">
+            </Route> 
+            <PrivateRoute path="/appointment">
               <AppointPage></AppointPage>
             </PrivateRoute>
-            <PrivateRoute exact path="/dashboard">
+            <PrivateRoute path="/dashboard">
               <Dashboard></Dashboard>
             </PrivateRoute>
             <Route exact path="/login">

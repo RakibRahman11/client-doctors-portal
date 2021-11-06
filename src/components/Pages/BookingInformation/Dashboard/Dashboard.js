@@ -14,17 +14,29 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
-import DatePick from '../../../Shared/DatePick/DatePick';
-import ConfirmList from '../ConfirmList/ConfirmList';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    useParams,
+    useRouteMatch,
+    NavLink
+} from "react-router-dom";
+import { Button, Divider } from '@mui/material';
+import DashboardHome from './DashboardHome/DashboardHome';
+import AdminAccess from './AdminAccess/AdminAccess';
+import AddDoctor from './AddDoctor/AddDoctor';
+import useAuth from '../../../../hooks/useAuth';
+import AdminRoute from './AdminRoute/AdminRoute';
 
 const drawerWidth = 240;
 
 function Dashboard(props) {
     const { window } = props;
-    const [date, setDate] = React.useState(new Date());
     const [mobileOpen, setMobileOpen] = React.useState(false);
-
+    const { admin } = useAuth()
+    const { path, url } = useRouteMatch();
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
@@ -32,6 +44,15 @@ function Dashboard(props) {
     const drawer = (
         <div>
             <Toolbar />
+            <Link to='/home'><Button color="inherit">Home</Button></Link>
+            <br />
+            <Link to={`${url}`}><Button color="inherit">DashBoard</Button></Link>
+            <br />
+            {admin && <Box>
+                <Link to={`${url}/adminAccess`}><Button color="inherit">Admin Status</Button></Link>
+                <br />
+                <Link to={`${url}/addDoctor`}><Button color="inherit">Add Doctor</Button></Link></Box>}
+            <Divider />
             <List>
                 {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                     <ListItem button key={text}>
@@ -46,7 +67,6 @@ function Dashboard(props) {
     );
 
     const container = window !== undefined ? () => window().document.body : undefined;
-
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -109,16 +129,17 @@ function Dashboard(props) {
                 sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
             >
                 <Toolbar />
-                <Typography paragraph>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} md={5}>
-                            <DatePick date={date} setDate={setDate}></DatePick>
-                        </Grid>
-                        <Grid item xs={12} md={7}>
-                            <ConfirmList date={date}></ConfirmList>
-                        </Grid>
-                    </Grid>
-                </Typography>
+                <Switch>
+                    <Route exact path={path}>
+                        <DashboardHome></DashboardHome>
+                    </Route>
+                    <AdminRoute path={`${path}/adminAccess`}>
+                        <AdminAccess></AdminAccess>
+                    </AdminRoute>
+                    <AdminRoute path={`${path}/addDoctor`}>
+                        <AddDoctor></AddDoctor>
+                    </AdminRoute>
+                </Switch>
             </Box>
         </Box>
     );
